@@ -78,8 +78,8 @@ initMap = () => {
         scrollWheelZoom: false
       });
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-    mapboxToken: '<your MAPBOX API KEY HERE>',
-    maxZoom: 18,
+      mapboxToken: 'sk.eyJ1IjoicmF2aW5lcmVsbGEiLCJhIjoiY2pubnp6b3hiMmMwbTNwbzMyZTM5MzZtZiJ9.18PfkHCxg7vqtjzsv_Zb3A',
+      maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
       '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
       'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -156,29 +156,42 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  * Create restaurant HTML.
  */
 createRestaurantHTML = (restaurant) => {
-  const li = document.createElement('li');
-
+    const li = document.createElement('li');
+    li.role = 'listitem';
+    li.tabindex = 1;
+  const di = document.createElement('div');
+  di.className = 'restaurantlist-div';
   const image = document.createElement('img');
   image.className = 'restaurant-img';
+  image.alt = restaurant.name
+
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  li.append(image);
+  di.append(image);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
-  li.append(name);
+  name.focus();
+  
+  di.append(name);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
-  li.append(neighborhood);
+  neighborhood.className = 'restaurant-neighborhood'
+  di.append(neighborhood);
 
-  const address = document.createElement('p');
+  const address = document.createElement('address');
+  address.className = 'restaurant-address'
   address.innerHTML = restaurant.address;
-  li.append(address);
+  
+  di.append(address);
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
+  more.tabIndex = -1;
+  di.append(more)
+  li.append(di);
+
 
   return li
 }
@@ -208,4 +221,23 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 } */
+
+
+/*
+  Note that service worker works only in on https
+*/
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+        .then(function (reg) {
+            // registration worked
+            console.log('Registration succeeded. Scope is ' + reg.scope);
+        }).catch(function (error) {
+            // registration failed
+            console.log('Registration failed with ' + error);
+        });
+}
+else {
+    console.log("nothing to register");
+}
+
 

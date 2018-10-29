@@ -22,8 +22,8 @@ initMap = () => {
         scrollWheelZoom: false
       });
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-        mapboxToken: '<your MAPBOX API KEY HERE>',
-        maxZoom: 18,
+          mapboxToken: 'sk.eyJ1IjoicmF2aW5lcmVsbGEiLCJhIjoiY2pubnp6b3hiMmMwbTNwbzMyZTM5MzZtZiJ9.18PfkHCxg7vqtjzsv_Zb3A',
+        maxZoom: 15,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
           '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
           'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -82,9 +82,10 @@ fetchRestaurantFromURL = (callback) => {
 fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
-
+  name.tabIndex = 1;
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
+  address.tabIndex = 2;
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
@@ -105,7 +106,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
-  const hours = document.getElementById('restaurant-hours');
+    const hours = document.getElementById('restaurant-hours');
+    hours.tabIndex = 4;
   for (let key in operatingHours) {
     const row = document.createElement('tr');
 
